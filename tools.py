@@ -85,6 +85,8 @@ def menu():
         print('¡Hecho! Gracias por usar AsunaTools una vez mas,')
         print('Escrito por Asuna y Ekardo')
         print('')
+        if sys == 'win32':
+            os.system('pause')
         exit(0)
     else:
         clear()
