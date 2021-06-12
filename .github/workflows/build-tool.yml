@@ -23,3 +23,6 @@ jobs:
         
     - name: Build package
       run: pyinstaller --onefile tools.py
+    
+    - name: Run APP
+      run: ./dist/tools.exe
