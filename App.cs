@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Net;
+using System.Runtime.InteropServices;
 
 namespace MinecraftTools {
     class App {
-        static void Main() {
-
+        private static void Main() {
             Console.Clear();
             Console.WriteLine("==========================================================================");
             System.Threading.Thread.Sleep(100);
@@ -26,18 +28,45 @@ namespace MinecraftTools {
             Console.WriteLine("==========================================================================");
             System.Threading.Thread.Sleep(1000);
 
-            bool showMenu = true;
-            while (showMenu) { showMenu = Menu(); }
-            Console.Clear();
-            Console.WriteLine("===================================");
-            Console.WriteLine("          Minecraft Tools          ");
-            Console.WriteLine("===================================");
-            Console.WriteLine();
-            Console.WriteLine("¡Hecho! Gracias por usar AsunaTools una vez mas,");
-            Console.WriteLine("Escrito por Asuna y Ekardo.");
-            Console.WriteLine();
-            Console.WriteLine("Presione cualquier tecla para salir.");
-            Console.ReadLine();
+            if (Directory.Exists(MinecraftDir())) {
+                var showMenu = true;
+                while (showMenu) { showMenu = Menu(); }
+                Console.Clear();
+                Console.WriteLine("===================================");
+                Console.WriteLine("          Minecraft Tools          ");
+                Console.WriteLine("===================================");
+                Console.WriteLine();
+                Console.WriteLine("¡Hecho! Gracias por usar AsunaTools una vez mas,");
+                Console.WriteLine("Escrito por Asuna y Ekardo.");
+                Console.WriteLine();
+                Console.WriteLine("Presione cualquier tecla para salir.");
+                Console.ReadLine();
+            } else {
+                Console.Clear();
+                Console.WriteLine("===================================");
+                Console.WriteLine("          Minecraft Tools          ");
+                Console.WriteLine("===================================");
+                Console.WriteLine();
+                Console.WriteLine("¡Minecraft no esta instalado!");
+                Console.WriteLine();
+                Console.WriteLine("Presione cualquier tecla para salir.");
+                Console.ReadLine();
+            }
+        }
+
+        public static string MinecraftDir() {
+            var userName = Environment.UserName;
+            var minecraftDir = "";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                minecraftDir = "C:/Users/" + userName + "/AppData/Roaming/.minecraft";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
+                minecraftDir = "/home/" + userName + "/.minecraft";
+            }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
+                minecraftDir = "/Users/" + userName + "/Library/Application Support/minecraft";
+            }
+            return minecraftDir;
         }
         
         private static bool Menu() {
@@ -46,17 +75,16 @@ namespace MinecraftTools {
             Console.WriteLine("          Minecraft Tools          ");
             Console.WriteLine("===================================");
             Console.WriteLine();
-            Console.WriteLine("(1) Instalar Forge");
-            Console.WriteLine("(2) Instalar Mods");
+            Console.WriteLine("(1) Descargar Mods");
+            Console.WriteLine("(2) Instalar Forge");
             Console.WriteLine("(3) Instalar Optifine");
             Console.WriteLine();
             Console.WriteLine("(4) Salir");
             Console.Write("\r\nSelecciona una opcion: ");
-            switch (Console.ReadLine())
-            {
+            switch (Console.ReadLine()) {
                 case "1":
                     Console.Clear();
-                    Console.WriteLine("Si");
+                    InstallMods();
                     return true;
                 case "2":
                     Console.Clear();
@@ -70,5 +98,14 @@ namespace MinecraftTools {
                     return false;
             }
         }
+        private static void InstallMods() {
+            var modsDir = MinecraftDir() + "/mods";
+            if (!Directory.Exists(modsDir)) {
+                Directory.CreateDirectory(modsDir);
+            }
+            using var client = new WebClient();
+            client.DownloadFile("https://asuna.tools/data/downloads/asunamc/mods.zip",@modsDir);
+        }
+        
     }
 }
