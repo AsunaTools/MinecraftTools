@@ -102,7 +102,7 @@ def forge():
 
     time.sleep(2)
 
-    url = 'https://asuna.tools/data/downloads/asunamc/forge.zip'
+    url = 'https://static.asuna.tools/downloads/asunamc/forge.zip'
 
     def show_progress(block_num, block_size, total_size):
         global pbar
@@ -163,7 +163,7 @@ def mods():
 
     time.sleep(2)
 
-    url = 'https://asuna.tools/data/downloads/asunamc/mods.zip'
+    url = 'https://static.asuna.tools/downloads/asunamc/mods.zip'
 
     def show_progress(block_num, block_size, total_size):
         global pbar
@@ -207,7 +207,7 @@ def optifine():
 
     time.sleep(2)
 
-    url = 'https://asuna.tools/data/downloads/asunamc/optifine.zip'
+    url = 'https://static.asuna.tools/downloads/asunamc/optifine.zip'
 
     def show_progress(block_num, block_size, total_size):
         global pbar
