@@ -90,13 +90,17 @@ namespace MinecraftTools {
                 case "2":
                     Console.Clear();
                     Console.WriteLine("Work In Progress");
+                    Thread.Sleep(2000);
                     return true;
                 case "3":
                     Console.Clear();
                     Console.WriteLine("Work In Progress");
+                    Thread.Sleep(2000);
                     return true;
-                default:
+                case "4":
                     return false;
+                default:
+                    return true;
             }
         }
         private static void InstallMods() {
