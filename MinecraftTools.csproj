@@ -2,8 +2,17 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Platforms>AnyCPU;x64;ARM64</Platforms>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <PackageProjectUrl>https://github.com/AsunaTools/MinecraftTools</PackageProjectUrl>
+    <Copyright>AsunaTools</Copyright>
+    <Description>Simple Tool for managing mods and optionals versions such as Forge and Optifine.</Description>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
 
 </Project>

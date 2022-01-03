@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -6,8 +8,22 @@ using System.Threading;
 
 namespace MinecraftTools {
     class App {
-        private static void Main() {
+        static void Main(string[] args) {
             Console.Clear();
+            String javaPath = "java";
+            if (args.Length != 0) {
+                if (args[0] == "--java") {
+                    if (args.Length == 1) {
+                        Console.WriteLine("Invalid Argument!");
+                        System.Environment.Exit(1);
+                    } else {
+                        javaPath = args[1];
+                    }
+                } else {
+                    Console.WriteLine("Invalid Argument!");
+                    System.Environment.Exit(1);
+                }
+            }
             Console.WriteLine("==========================================================================");
             Thread.Sleep(100);
             Console.WriteLine("       d8888                                     888b     d888  .d8888b.  ");
@@ -18,16 +34,30 @@ namespace MinecraftTools {
             Thread.Sleep(100);
             Console.WriteLine("    d88P 888 .d8888b  888  888 88888b.   8888b.  888Y88888P888 888        ");
             Thread.Sleep(100);
-            Console.WriteLine("   d88P  888 88K      888  888 888 " + '\u0022' + "88b     " + '\u0022' +  "88b 888 Y888P 888 888        ");
+            Console.WriteLine("   d88P  888 88K      888  888 888 \"88b     \"88b 888 Y888P 888 888        ");
             Thread.Sleep(100);
-            Console.WriteLine("  d88P   888 " + '\u0022' + "Y8888b. 888  888 888  888 .d888888 888  Y8P  888 888    888 ");
+            Console.WriteLine("  d88P   888 \"Y8888b. 888  888 888  888 .d888888 888  Y8P  888 888    888 ");
             Thread.Sleep(100);
-            Console.WriteLine(" d8888888888      X88 Y88b 888 888  888 888  888 888   " + '\u0022' + "   888 Y88b  d88P ");
+            Console.WriteLine(" d8888888888      X88 Y88b 888 888  888 888  888 888   \"   888 Y88b  d88P ");
             Thread.Sleep(100);
-            Console.WriteLine("d88P     888  88888P   " + '\u0022' + "Y88888 888  888 " + '\u0022' + "Y888888 888       888  " + '\u0022' + "Y8888P" + '\u0022' + "  ");
+            Console.WriteLine("d88P     888  88888P   \"Y88888 888  888 \"Y888888 888       888  \"Y8888P\"  ");
             Thread.Sleep(100);
             Console.WriteLine("==========================================================================");
             Thread.Sleep(1000);
+
+            if (!checkJava(javaPath)) {
+                Console.Clear();
+                Console.WriteLine("===================================");
+                Console.WriteLine("          Minecraft Tools          ");
+                Console.WriteLine("===================================");
+                Console.WriteLine();
+                Console.WriteLine("¡Java no esta instalado o no esta declarado!");
+                Console.WriteLine("¡Usa \"--java [Ruta]\" para seleccionar la ruta de java!");
+                Console.WriteLine();
+                Console.WriteLine("Presione cualquier tecla para salir.");
+                Console.ReadLine();
+                System.Environment.Exit(0);
+            }
 
             if (Directory.Exists(MinecraftDir())) {
                 var showMenu = true;
@@ -78,7 +108,7 @@ namespace MinecraftTools {
             Console.WriteLine();
             Console.WriteLine("(1) Descargar Mods");
             Console.WriteLine("(2) Instalar Forge");
-            Console.WriteLine("(3) Instalar Optifine");
+            Console.WriteLine("(3) Instalar OptiFine");
             Console.WriteLine();
             Console.WriteLine("(4) Salir");
             Console.Write("\r\nSelecciona una opcion: ");
@@ -89,13 +119,11 @@ namespace MinecraftTools {
                     return true;
                 case "2":
                     Console.Clear();
-                    Console.WriteLine("Work In Progress");
-                    Thread.Sleep(2000);
+                    InstallJar("forge");
                     return true;
                 case "3":
                     Console.Clear();
-                    Console.WriteLine("Work In Progress");
-                    Thread.Sleep(2000);
+                    InstallJar("optifine");
                     return true;
                 case "4":
                     return false;
@@ -107,6 +135,8 @@ namespace MinecraftTools {
             Console.WriteLine("===================================");
             Console.WriteLine("          Minecraft Tools          ");
             Console.WriteLine("===================================");
+            Console.WriteLine();
+            Console.WriteLine("¡Simplemente no hagas nada hasta que termine!");
             Console.WriteLine();
             var modsDir = MinecraftDir() + "/mods";
             if (!Directory.Exists(modsDir)) {
@@ -122,21 +152,43 @@ namespace MinecraftTools {
             {
                 dir.Delete(true); 
             }
-            Console.WriteLine("Done");
+            Console.WriteLine("Done!");
             Console.Write("Download mods.zip: ");
             WebClient Client = new WebClient ();
             Client.DownloadFile(new Uri("https://static.asuna.tools/downloads/asunamc/mods.zip"), @modsDir + "/mods.zip");
-            Console.WriteLine("Done");
+            Console.WriteLine("Done!");
             Console.Write("Extract mods: ");
             System.IO.Compression.ZipFile.ExtractToDirectory(@modsDir + "/mods.zip", @modsDir);
-            Console.WriteLine("Done");
+            Console.WriteLine("Done!");
             Console.Write("Delete Temp: ");
             if(File.Exists(@modsDir + "/mods.zip"))
             {
                 File.Delete(@modsDir + "/mods.zip");
             }
-            Console.WriteLine("Done");
+            Console.WriteLine("Done!");
             Thread.Sleep(300);
+        }
+
+        private static void InstallJar(String type) {
+            
+        }
+
+        static private bool checkJava(string path) {
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.FileName = path;
+                psi.Arguments = " -version";
+                psi.RedirectStandardError = true;
+                psi.UseShellExecute = false;
+
+                Process pr = Process.Start(psi);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
