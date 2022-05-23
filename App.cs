@@ -78,6 +78,7 @@ namespace MinecraftTools {
                 Console.WriteLine("          Minecraft Tools          ");
                 Console.WriteLine("===================================");
                 Console.WriteLine();
+                Console.WriteLine(MinecraftDir());
                 Console.WriteLine("¡Minecraft no esta instalado!");
                 Console.WriteLine();
                 Console.WriteLine("Presione cualquier tecla para salir.");
@@ -92,7 +93,7 @@ namespace MinecraftTools {
                 minecraftDir = "C:/Users/" + userName + "/AppData/Roaming/.minecraft";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)) {
-                minecraftDir = "/home/" + userName + "/.minecraft";
+                minecraftDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/.minecraft";
             }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) {
                 minecraftDir = "/Users/" + userName + "/Library/Application Support/minecraft";
@@ -155,7 +156,7 @@ namespace MinecraftTools {
             Console.WriteLine("Done!");
             Console.Write("Download mods.zip: ");
             WebClient Client = new WebClient ();
-            Client.DownloadFile(new Uri("https://static.asuna.tools/downloads/asunamc/mods.zip"), @modsDir + "/mods.zip");
+            Client.DownloadFile(new Uri("https://asuna.tools/data/asunamc/mods.zip"), @modsDir + "/mods.zip");
             Console.WriteLine("Done!");
             Console.Write("Extract mods: ");
             System.IO.Compression.ZipFile.ExtractToDirectory(@modsDir + "/mods.zip", @modsDir);

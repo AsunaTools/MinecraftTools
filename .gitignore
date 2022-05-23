@@ -1,6 +1,7 @@
 ﻿/bin
-/.idea
+.idea
 /.vs
 /obj
 *.user
 *.iml
+.vscode
