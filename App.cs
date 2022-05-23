@@ -78,7 +78,6 @@ namespace MinecraftTools {
                 Console.WriteLine("          Minecraft Tools          ");
                 Console.WriteLine("===================================");
                 Console.WriteLine();
-                Console.WriteLine(MinecraftDir());
                 Console.WriteLine("¡Minecraft no esta instalado!");
                 Console.WriteLine();
                 Console.WriteLine("Presione cualquier tecla para salir.");
