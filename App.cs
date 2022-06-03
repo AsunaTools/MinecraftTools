@@ -6,21 +6,20 @@ using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace MinecraftTools {
-    static class App {
-        static void Main(string[] args) {
+    internal static class App {
+        private static void Main(string[] args) {
             Console.Clear();
-            String javaPath = "java";
             if (args.Length != 0) {
                 if (args[0] == "--java") {
                     if (args.Length == 1) {
                         Console.WriteLine("Invalid Argument!");
-                        System.Environment.Exit(1);
+                        Environment.Exit(1);
                     } else {
-                        javaPath = args[1];
+                        Globals.Java = args[1];
                     }
                 } else {
                     Console.WriteLine("Invalid Argument!");
-                    System.Environment.Exit(1);
+                    Environment.Exit(1);
                 }
             }
             Console.WriteLine("==========================================================================");
@@ -44,7 +43,7 @@ namespace MinecraftTools {
             Console.WriteLine("==========================================================================");
             Thread.Sleep(1000);
 
-            if (!CheckJava(javaPath)) {
+            if (!CheckJava(Globals.Java)) {
                 Console.Clear();
                 Console.WriteLine("===================================");
                 Console.WriteLine("          Minecraft Tools          ");
@@ -55,7 +54,7 @@ namespace MinecraftTools {
                 Console.WriteLine();
                 Console.WriteLine("Presione cualquier tecla para salir.");
                 Console.ReadLine();
-                System.Environment.Exit(0);
+                Environment.Exit(0);
             }
 
             if (Directory.Exists(MinecraftDir())) {
@@ -78,6 +77,9 @@ namespace MinecraftTools {
                 Console.WriteLine("===================================");
                 Console.WriteLine();
                 Console.WriteLine("¡Minecraft no esta instalado!");
+                Console.WriteLine();
+                Console.WriteLine("Viste https://www.minecraft.net/download");
+                Console.WriteLine("para descargar Minecraft.");
                 Console.WriteLine();
                 Console.WriteLine("Presione cualquier tecla para salir.");
                 Console.ReadLine();
@@ -106,8 +108,8 @@ namespace MinecraftTools {
             Console.WriteLine("===================================");
             Console.WriteLine();
             Console.WriteLine("(1) Descargar Mods");
-            Console.WriteLine("(2) Instalar Forge");
-            Console.WriteLine("(3) Instalar OptiFine");
+            Console.WriteLine("(2) Instalar Forge (1.12.2)");
+            Console.WriteLine("(3) Instalar OptiFine (Ultima version)");
             Console.WriteLine();
             Console.WriteLine("(4) Salir");
             Console.Write("\r\nSelecciona una opcion: ");
@@ -143,12 +145,10 @@ namespace MinecraftTools {
             }
             Console.Write("Clear mods folder: ");
             DirectoryInfo di = new DirectoryInfo(modsDir);
-            foreach (FileInfo file in di.GetFiles())
-            {
+            foreach (FileInfo file in di.GetFiles()) {
                 file.Delete(); 
             }
-            foreach (DirectoryInfo dir in di.GetDirectories())
-            {
+            foreach (DirectoryInfo dir in di.GetDirectories()) {
                 dir.Delete(true); 
             }
             Console.WriteLine("Done!");
@@ -160,8 +160,7 @@ namespace MinecraftTools {
             System.IO.Compression.ZipFile.ExtractToDirectory(@modsDir + "/mods.zip", @modsDir);
             Console.WriteLine("Done!");
             Console.Write("Delete Temp: ");
-            if(File.Exists(@modsDir + "/mods.zip"))
-            {
+            if(File.Exists(@modsDir + "/mods.zip")) {
                 File.Delete(@modsDir + "/mods.zip");
             }
             Console.WriteLine("Done!");
@@ -169,26 +168,81 @@ namespace MinecraftTools {
         }
 
         private static void InstallJar(String type) {
-            if (type == "forge")
-            {
-                
+            switch (type) {
+                case "forge": {
+                    Console.Write("Download Forge: ");
+                    var client = new WebClient();
+                    client.DownloadFile(new Uri("https://asuna.tools/data/asunamc/forge.jar"), Path.GetTempPath() + "/forge.jar");
+                    Console.WriteLine("Done!");
+                    Console.WriteLine("Running Installer...");
+                    Console.WriteLine();
+                    try {
+                        var psi = new ProcessStartInfo {
+                            FileName = Globals.Java,
+                            Arguments = " -jar " + Path.GetTempPath() + "/forge.jar",
+                            RedirectStandardError = true,
+                            UseShellExecute = false
+                        };
+
+                        var pr = Process.Start(psi);
+                        pr?.WaitForExit();
+                    }
+                    catch (Exception) {
+                        Console.WriteLine("Installer failed!");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("Presione cualquier tecla para terminar la instalacion.");
+                    Console.ReadLine();
+                    break;
+                }
+                case "optifine": {
+                    Console.Write("Download Optifine: ");
+                    var client = new WebClient();
+                    client.DownloadFile(new Uri("https://asuna.tools/data/asunamc/optifine.jar"), Path.GetTempPath() + "/optifine.jar");
+                    Console.WriteLine("Done!");
+                    Console.WriteLine("Running Installer...");
+                    Console.WriteLine();
+                    try {
+                        var psi = new ProcessStartInfo {
+                            FileName = Globals.Java,
+                            Arguments = " -jar " + Path.GetTempPath() + "/optifine.jar",
+                            RedirectStandardError = true,
+                            UseShellExecute = false
+                        };
+
+                        var pr = Process.Start(psi);
+                        pr?.WaitForExit();
+                    }
+                    catch (Exception) {
+                        Console.WriteLine("Installer failed!");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("Presione cualquier tecla para terminar la instalacion.");
+                    Console.ReadLine();
+                    break;
+                }
             }
         }
 
-        private static bool CheckJava(string path) {
-            try
-            {
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = path;
-                psi.Arguments = " -version";
-                psi.RedirectStandardError = true;
-                psi.UseShellExecute = false;
+        private static class Globals {
+            public static String Java = "java";
+        }
 
-                Process pr = Process.Start(psi);
+        private static bool CheckJava(string path) {
+            try {
+                var psi = new ProcessStartInfo {
+                    FileName = path,
+                    Arguments = " -version",
+                    RedirectStandardError = true,
+                    UseShellExecute = false
+                };
+
+                Process.Start(psi);
                 return true;
             }
-            catch (Exception)
-            {
+            catch (Exception) {
                 return false;
             }
         }
