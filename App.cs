@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -7,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace MinecraftTools {
-    class App {
+    static class App {
         static void Main(string[] args) {
             Console.Clear();
             String javaPath = "java";
@@ -45,7 +44,7 @@ namespace MinecraftTools {
             Console.WriteLine("==========================================================================");
             Thread.Sleep(1000);
 
-            if (!checkJava(javaPath)) {
+            if (!CheckJava(javaPath)) {
                 Console.Clear();
                 Console.WriteLine("===================================");
                 Console.WriteLine("          Minecraft Tools          ");
@@ -154,8 +153,8 @@ namespace MinecraftTools {
             }
             Console.WriteLine("Done!");
             Console.Write("Download mods.zip: ");
-            WebClient Client = new WebClient ();
-            Client.DownloadFile(new Uri("https://asuna.tools/data/asunamc/mods.zip"), @modsDir + "/mods.zip");
+            var client = new WebClient ();
+            client.DownloadFile(new Uri("https://asuna.tools/data/asunamc/mods.zip"), @modsDir + "/mods.zip");
             Console.WriteLine("Done!");
             Console.Write("Extract mods: ");
             System.IO.Compression.ZipFile.ExtractToDirectory(@modsDir + "/mods.zip", @modsDir);
@@ -170,10 +169,13 @@ namespace MinecraftTools {
         }
 
         private static void InstallJar(String type) {
-            
+            if (type == "forge")
+            {
+                
+            }
         }
 
-        static private bool checkJava(string path) {
+        private static bool CheckJava(string path) {
             try
             {
                 ProcessStartInfo psi = new ProcessStartInfo();
