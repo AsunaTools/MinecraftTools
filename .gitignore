@@ -5,3 +5,4 @@
 *.user
 *.iml
 .vscode
+/Properties/PublishProfiles
