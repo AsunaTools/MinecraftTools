@@ -108,7 +108,7 @@ namespace MinecraftTools {
             Console.WriteLine("===================================");
             Console.WriteLine();
             Console.WriteLine("(1) Descargar Mods");
-            Console.WriteLine("(2) Instalar Forge (1.12.2)");
+            Console.WriteLine("(2) Instalar Forge (Version del server)");
             Console.WriteLine("(3) Instalar OptiFine (Ultima version)");
             Console.WriteLine();
             Console.WriteLine("(4) Salir");
